@@ -33,6 +33,27 @@ class ToolsWindow(QtWidgets.QWidget):
         self.title.setAlignment(QtCore.Qt.AlignCenter)
         layout.addWidget(self.title)
 
+        # --- Bunny Hop Interval Slider ---
+        self.bhop_interval_label = QtWidgets.QLabel(
+            f"Bunny Hop Interval (ms): {self.state.get('bunnyhop_interval', 40)}", self
+        )
+        self.bhop_interval_label.setStyleSheet("color: white;")
+        layout.addWidget(self.bhop_interval_label)
+
+        self.bhop_interval_slider = QtWidgets.QSlider(QtCore.Qt.Horizontal, self)
+        self.bhop_interval_slider.setMinimum(10)
+        self.bhop_interval_slider.setMaximum(300)
+        self.bhop_interval_slider.setValue(self.state.get('bunnyhop_interval', 40))
+        self.bhop_interval_slider.valueChanged.connect(self.set_bhop_interval)
+        layout.addWidget(self.bhop_interval_slider)
+
+        # --- Bunny Hop Checkbox ---
+        self.bunnyhop_checkbox = QtWidgets.QCheckBox("Enable Bunny Hop", self)
+        self.bunnyhop_checkbox.setStyleSheet("color: white;")
+        self.bunnyhop_checkbox.setChecked(self.state.get('bunnyhop_enabled', False))
+        self.bunnyhop_checkbox.stateChanged.connect(self.toggle_bunnyhop)
+        layout.addWidget(self.bunnyhop_checkbox)
+
         layout.addStretch(1)  # Pushes the Back button to the bottom
 
         self.back_btn = QtWidgets.QPushButton("Back")
@@ -51,3 +72,11 @@ class ToolsWindow(QtWidgets.QWidget):
     def set_menu_opacity(self, opacity):
         opacity = float(opacity)
         self.setWindowOpacity(opacity)
+
+    def set_bhop_interval(self, value):
+        self.state['bunnyhop_interval'] = value
+        self.bhop_interval_label.setText(f"Bunny Hop Interval (ms): {value}")
+
+    def toggle_bunnyhop(self, state):
+        enabled = state == QtCore.Qt.Checked
+        self.state['bunnyhop_enabled'] = enabled
