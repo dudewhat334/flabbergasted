@@ -3,7 +3,7 @@ import keyboard
 import time
 
 class BunnyHopMacro:
-    def __init__(self, state, macro_key='f6', jump_key='space'):
+    def __init__(self, state, macro_key='space', jump_key='space'):
         self.state = state
         self.macro_key = macro_key
         self.jump_key = jump_key

@@ -1,11 +1,13 @@
 import sys
 import pygame
 from PyQt5 import QtWidgets
-from config import load_config
 from gui_main import MainWindow
 from crosshair_overlay import CrosshairOverlay
 from menu_toggle_controller import MenuToggleController
-from mouse_listener import start_rmb_listener  # <-- ADD THIS LINE
+from mouse_listener import start_rmb_listener
+from config import load_config
+from bunnyhop_macro import BunnyHopMacro
+from afk_macro import AFKMacro  # <-- AFK Macro import
 
 def main():
     pygame.init()
@@ -17,8 +19,20 @@ def main():
         "overlay_visible": True,
         "app_running": True,
     })
+
+    # Start Bunny Hop Macro
+    bunnyhop_macro = BunnyHopMacro(
+        state,
+        macro_key=state.get('bunnyhop_macro_key', 'space'),
+        jump_key=state.get('bunnyhop_jump_key', 'space')
+    )
+
+    # Start AFK Macro
+    afk_macro = AFKMacro(state)
+
     # --- Start RMB listener ---
     rmb_listener = start_rmb_listener(state)
+
     app = QtWidgets.QApplication(sys.argv)
     app.setStyleSheet("""
         QLabel, QGroupBox, QSlider, QComboBox, QPushButton {
